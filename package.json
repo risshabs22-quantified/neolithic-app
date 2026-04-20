@@ -77,7 +77,7 @@
       "target": [
         "nsis"
       ],
-      "artifactName": "${productName}-${version}-Windows-Setup.${ext}"
+      "artifactName": "${productName}-Setup.${ext}"
     },
     "nsis": {
       "oneClick": false,
