@@ -1,0 +1,39 @@
+CANONICAL PROMPT — Neolithic as a pure Windows desktop app (one installer, no browser extension)
+
+WHAT YOU ARE BUILDING
+- Exactly one Windows artifact: the Neolithic installer (NSIS or equivalent). User installs once. No Chrome extension, no Edge extension, no Load unpacked, no Chrome Web Store, no second download.
+- All shipped logic runs inside Electron (main + renderer). Background work = main process services, not a separate browser add-on.
+
+WHAT YOU ARE NOT BUILDING
+- Do NOT preserve today’s design where an MV3 extension sends per-tab URLs and last-used timestamps over localhost WebSocket. That requires a browser extension. This prompt explicitly rejects that path.
+
+OS REALITY (do not hand-wave)
+- Windows does not give third-party apps reliable access to every Chrome or Edge tab’s URL and per-tab last-used time without browser cooperation (extension or debugging channel). Your replacement feature must use only what the OS allows: e.g. foreground window, top-level window enumeration, process name, window titles where available, timers. Never claim parity with the old per-tab extension model.
+
+IMPLEMENTATION DIRECTION (choose one and ship it)
+Path A — Windows activity surface (recommended for honesty)
+- Implement “browser / focus awareness” using Win32 APIs from the main process (or a small native helper only if already justified): active app, time in foreground, count of top-level Chrome or Edge windows, optional stale hints based on window titles or idle time. No per-tab URL ingestion from Chrome.
+- Remove WebSocket server and extension discovery if they exist only for the extension; delete or stub UI that assumed live tab arrays from the extension. Update Zustand or IPC so the renderer consumes the new source of truth.
+
+Path B — Scope cut
+- Remove live tab monitoring and stale-tab toasts entirely for v1. Keep Tasks, Tab Groups (manual URLs), Window Manager. Clean out extension-related code paths.
+
+Either path: keep SQLite, bootstrap secrets, migrate-on-start, and the Windows installer story already in the repo unless broken.
+
+DOCS AND UX
+- README: one section for end users (download installer, install, open app). Say clearly that tab URL sync from Chrome is not part of this product variant.
+- In-app copy on former “Browser tabs” screen must match the chosen path (no misleading “install extension” steps).
+
+QUALITY BAR
+- npm run typecheck passes.
+- npm run dev works without any browser extension installed.
+- No references that imply a required companion extension.
+
+Use this file as the single source of truth for scope. Ignore older prompts that still require browser-extension or per-tab WebSocket sync.
+
+IMPLEMENTED IN REPO (Path A)
+- WebSocket extension server removed; `browserSurfaceMonitor` polls Windows window list + optional foreground HWND.
+- UI: **Browser windows** page; preload API `window.api.browserSurface`.
+- See `CLAUDE.md` for paths.
+
+END

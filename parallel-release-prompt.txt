@@ -1,0 +1,42 @@
+GOAL
+Ship Neolithic so a normal Windows user gets ONE download (installer), double-clicks, runs the app with NO Postgres, NO manual .env, NO npm. Optional: same repo ready for GitHub Releases.
+
+CONTEXT (already in repo)
+- SQLite + prisma migrate on app startup; DATABASE_URL defaults to userData if unset.
+- Bootstrap in src/main/env/bootstrap.ts creates neolithic-secrets.json for missing BETTER_AUTH_SECRET, STORE_ENCRYPTION_KEY.
+- npm run release:win builds NSIS installer to release/ (electron-builder; win.sign null; signAndEditExecutable false to avoid winCodeSign symlink issues on some machines).
+- Browser extension lives in browser-extension/ and today requires Chrome Load unpacked.
+
+TASKS (do all that apply; keep changes minimal and consistent with existing code style)
+
+1) README
+- Split into two sections: "Install Neolithic (Windows)" for end users (download installer, run, where data lives, no Postgres) and "Developers" (Node 20+, npm install, npm run dev, optional DATABASE_URL in .env, npm run db:migrate for schema work only if needed).
+- Remove outdated claims that PostgreSQL is required for normal use.
+- Document npm run release:win and where the Setup exe appears (release/).
+- Short note: Windows SmartScreen may warn on unsigned builds; code signing is optional follow-up.
+
+2) GitHub Actions release workflow
+- Add .github/workflows/release-windows.yml (or release.yml) that on push of tag v* (e.g. v1.0.0) OR workflow_dispatch: checkout, setup Node LTS, npm ci, npm run release:win, upload release/Neolithic-*-Windows-Setup.exe (or glob) as a workflow artifact; if easy, use softprops/action-gh-release to attach to GitHub Release when tag push.
+- Document in README how to tag and what artifact name to expect.
+
+3) Extension path for non-developers
+- On first run (or a Settings screen), show clear steps OR a button that opens the folder containing the unpacked extension shipped with the app.
+- Preferred: copy browser-extension/ into a stable path under app.getPath("userData") or next to the installed app via electron-builder extraResources, and tell the user exactly which folder to pick in Chrome Load unpacked.
+- Do NOT require users to clone the repo to get the extension.
+
+4) Polish (only if quick)
+- package.json author field if electron-builder warns.
+- Optional oneClick NSIS: consider oneClick true for fewer clicks; document tradeoff.
+
+ACCEPTANCE
+- Fresh Windows user story: download exe from Releases (or CI artifact), install, launch, sign up or use app without configuring DATABASE_URL.
+- README matches that story.
+- CI workflow file exists and is valid YAML; paths and Node version are correct for this repo.
+- typecheck passes; release:win completes on a clean runner (note any secrets not required for unsigned build).
+
+IF TWO AGENTS WORK IN PARALLEL (avoid duplicate edits)
+- Agent A: tasks 1 + 2 only (README + GitHub Actions).
+- Agent B: tasks 3 + 4 only (extension UX + package polish).
+- Both: rebase or hand-merge if both touch README; prefer Agent A own README except Agent B may add one subsection for extension if coordinated.
+
+END

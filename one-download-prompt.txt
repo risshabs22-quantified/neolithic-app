@@ -1,0 +1,30 @@
+GOAL (consumer parity, honest scope)
+Deliver a Neolithic experience that matches how normal apps work: users get ONE desktop download (Windows installer). Tab monitoring must NOT rely on Chrome Developer Mode or Load unpacked. The only standard way to achieve that for Chrome and Edge is to publish the MV3 extension to the official stores.
+
+NON-NEGOTIABLE PRODUCT TRUTH
+- A single .exe cannot legally or technically force-install a Chrome extension for random users. Google and Microsoft require store (or enterprise policy). So "one download alone" means: one installer for the Electron app PLUS the extension installed from the store like any other extension (two clicks in stores, zero dev mode). Position this clearly in the app and README.
+
+DESKTOP APP (one installer, zero dev setup)
+- Keep or finish: SQLite in userData, prisma migrate on startup, bootstrap secrets, NSIS build (npm run release:win), GitHub Actions attaching the installer to Releases on tag v*.
+- First-run screen: 3 bullets max — You are set up; optional Open folder for logs; optional Check for updates later.
+- README section "For everyone": download installer, install, open app, create account. No Node, Postgres, or .env.
+
+COMPANION EXTENSION (store path, not unpacked)
+1) Prepare browser-extension/ for store submission: manifest name, description, version aligned with app, privacy justification (local-only WebSocket to 127.0.0.1, no remote servers for tab data), narrow permissions narrative.
+2) Add a single config file or constants: CHROME_STORE_URL and EDGE_ADDON_URL (placeholders until you have real listing IDs).
+3) In-app UI (Settings or first-run): primary button "Install tab companion (Chrome)" and "Install tab companion (Edge)" opening those URLs in the default browser. After install, user returns to app; connection already uses localhost discovery file and WS token as today.
+4) Document in README: one-time install from store; why two installs is normal (desktop + browser policy).
+
+OPTIONAL (if you refuse store for v1)
+- Ship without store: then you CANNOT honestly claim one-download parity with Chrome tab APIs for all users. Fallback: hide tab-monitor features behind "Coming soon" or ship WebView-based tracking inside Electron only (major scope change — only do if explicitly requested).
+
+POLISH
+- package.json author to silence electron-builder warning.
+- Note SmartScreen for unsigned builds; document optional code signing later.
+
+ACCEPTANCE
+- End user: download one .exe from Releases, install, run app without env or DB setup.
+- End user: install companion from Chrome Web Store and Edge Add-ons pages linked in-app (no unpacked folder).
+- typecheck passes; CI workflow exists and produces the installer artifact.
+
+END

@@ -1,0 +1,26 @@
+GOAL
+One Windows download (single installer). One Neolithic process in the background. NO separate Chrome extension, NO Load unpacked, NO Chrome Web Store. Everything that ships must run inside the Electron desktop app only.
+
+HARD CONSTRAINT (read before coding)
+Chrome and Edge do not expose per-tab URLs and last-used times to random Windows apps. That is a browser security boundary. So you MUST drop the MV3 extension as the mechanism for tab monitoring.
+
+PRODUCT REDESIGN (pick a coherent path and implement it)
+A) Replace "browser tab monitor" with a Windows-only feature that needs zero browser cooperation, for example:
+   - Foreground window tracking in the main process (GetForegroundWindow / EnumWindows + GetWindowThreadProcessId + OpenProcess / QueryFullProcessImageName): infer which app is active, how long Chrome or Edge has been in foreground, warn on "browser in foreground too long" or "many top-level browser windows", optional stale hints based on window title changes only (never log full titles to disk; respect existing no-log policy for sensitive strings where possible).
+   OR
+B) Remove stale-tab warnings entirely from v1 and keep Tab Groups plus Tasks plus Window Manager only; document "full tab URL sync removed in favor of single-package Windows app."
+
+Choose A or B in code comments at the entry point of the new module. Do not leave dead extension WebSocket paths that imply an external extension is required.
+
+ENGINEERING TASKS
+1) Remove or disable by default the browser-extension/ workflow: no discovery file contract that assumes an extension; remove or gate WS server tab-update messages that only extensions sent. If WS is still used for nothing, remove WS server and related env (WS_AUTH_TOKEN) only if nothing else needs it; otherwise simplify.
+2) Update README and in-app copy so a normal user only ever downloads and installs the Windows app.
+3) Keep SQLite + bootstrap + migrate-on-start + release:win path as the distribution story.
+4) Prisma Tab model may remain for saved tab groups; do not require live tab sync from Chrome.
+5) typecheck passes; no broken imports referencing extension-only flows.
+
+ACCEPTANCE
+- Fresh user: one installer, install, run. No second install, no Chrome steps.
+- Tab-related UX matches the chosen redesign (A or B), not the old extension design.
+
+END

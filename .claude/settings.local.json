@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git init *)",
+      "Bash(git remote *)",
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "Bash(node -e \"const pkg = require\\('./node_modules/vite/package.json'\\); console.log\\(pkg.version\\)\")",
+      "Bash(node -e \"const pkg = require\\('./node_modules/electron-vite/package.json'\\); console.log\\(JSON.stringify\\(pkg.peerDependencies\\)\\)\")",
+      "Bash(node -e \"require\\('dotenv'\\)\")",
+      "Bash(npx prisma *)"
+    ]
+  }
+}

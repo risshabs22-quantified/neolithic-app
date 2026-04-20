@@ -1,0 +1,53 @@
+First read FOR_CLAUDE_CODE.txt, then CLAUDE.md and windows-one-download-prompt.txt (single Windows app, no extension). Then continue.
+
+You are a senior engineer. Implement the project from scratch in this workspace.
+
+Product name: neolithic-app
+Goal: A runnable Electron + React + TypeScript Windows desktop app (see windows-one-download-prompt.txt): tasks, manual tab groups (URLs), browser WINDOW surface via OS APIs only (no MV3 extension), window manager. SQLite + Prisma + Better Auth.
+
+Non-negotiable stack
+- Electron (current stable): contextIsolation true, nodeIntegration false, sandbox true
+- React 18, TypeScript strict mode, electron-vite
+- Tailwind CSS, shadcn/ui, Zustand, Zod
+- PostgreSQL with Pri/sma ORM
+- Better Auth (pick a pattern that works in Electron; keep glue code minimal)
+- encrypted electron-store for secrets and auth tokens (not localStorage)
+
+Security requirements
+- .env gitignored; .env.example with placeholders for: DATABASE_URL, BETTER_AUTH_SECRET, STORE_ENCRYPTION_KEY, WS_AUTH_TOKEN
+- CSP headers on every BrowserWindow
+- All IPC only via typed contextBridge in preload; renderer must not use raw ipcRenderer without that bridge
+- DATABASE_URL read only from environment (no hardcoding)
+- WebSocket server binds 127.0.0.1 only, requires shared secret auth using WS_AUTH_TOKEN
+- Never log tab URLs or window titles (no console.log of those fields)
+
+Features to ship (working UI and persistence)
+1. Tasks — create, complete, delete; priority low, medium, high; due date; dashboard highlights today's tasks
+2. Tab groups — save named groups of URLs; open all uses shell.openExternal
+3. Browser tab monitor — MV3 extension in browser-extension/ folder with only tabs and storage permissions; tracks last-used via chrome.tabs API; sends updates to Electron over local WebSocket; warns when tabs unused 7+ days (threshold configurable); toast with actions Close and Save to tab group; extension is unpacked (not store); Electron uses random port, stores in encrypted electron-store, shares connection details with extension via a file under app.getPath userData as in setup-prompt.txt
+4. Window manager (Windows only) — use windows-window-manager npm package; detect chaos: windows smaller than 400 by 300, partially off-screen, or 3+ windows of same app; Window Chaos panel with Snap Left, Snap Right, Maximize, Close per window and Auto-Organize All grid; on non-Windows, disable gracefully with clear UI copy
+
+Prisma schema (implement these models and fields)
+- User: id, email, hashedPassword, createdAt
+- Task: id, title, completed, priority, dueDate, userId, createdAt
+- TabGroup: id, name, userId, createdAt
+- Tab: id, url, title, tabGroupId, lastUsed
+
+npm scripts required
+- dev, build, db:migrate, db:studio, typecheck
+
+Required project structure
+- src/main/ — index.ts, ipc/, db/, services/
+- src/renderer/ — pages/, components/, store/, hooks/
+- src/shared/ — types.ts, constants.ts
+- prisma/
+- browser-extension/
+
+Deliverable quality bar
+- Real working code, not pseudocode
+- After npm install, copy .env.example to .env, run migrations, npm run dev should start the app without manual fixes
+- Keep changes focused on the spec; avoid unrelated refactors
+
+Also read and follow setup-prompt.txt in this repo line by line. If anything is ambiguous, make a reasonable choice, implement it, and add a short README section with run instructions only.
+
+After scaffolding, run npm install, fix errors until npm run typecheck and npm run dev succeed.

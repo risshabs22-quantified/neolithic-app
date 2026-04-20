@@ -1,0 +1,3 @@
+Paste this line first, then open CLAUDE.md and windows-one-download-prompt.txt.
+
+You are working on Neolithic. The app is a single Windows Electron package: NO browser extension, NO WebSocket tab sync. Browser awareness = browserSurfaceMonitor (top-level windows). wsServer and extension IPC are already removed. Read CLAUDE.md for file map. Do not reintroduce WS_AUTH_TOKEN, ws package, or MV3 extension as a requirement. When adding release CI or README edits, stay consistent with README.md "For everyone" vs "For developers" split.
