@@ -28,7 +28,8 @@ jobs:
         run: npm run release:win
 
       - name: List artifacts
-        run: ls -lh release/
+        shell: powershell
+        run: Get-ChildItem -Path release -Filter "*.exe" -File | Format-Table -Property Name, @{Name="Size";Expression={"{0:N0} MB" -f ($_.Length/1MB)}}
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
