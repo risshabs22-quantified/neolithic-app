@@ -47,10 +47,11 @@
     "productName": "Neolithic",
     "asar": true,
     "asarUnpack": [
-      "node_modules/prisma/**",
-      "node_modules/.prisma/**",
-      "node_modules/@prisma/client/**",
-      "node_modules/@prisma/engines/**"
+      "**/prisma/**",
+      "**/.prisma/**",
+      "**/@prisma/**",
+      "**/query_engine*",
+      "**/libquery_engine*"
     ],
     "directories": {
       "output": "release"
@@ -69,6 +70,14 @@
           "!dev.db",
           "!dev.db-journal"
         ]
+      },
+      {
+        "from": "node_modules/.prisma",
+        "to": "node_modules/.prisma"
+      },
+      {
+        "from": "node_modules/@prisma/client",
+        "to": "node_modules/@prisma/client"
       }
     ],
     "win": {
