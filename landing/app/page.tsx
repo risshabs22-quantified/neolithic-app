@@ -103,7 +103,7 @@ export default function Home() {
 
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center pt-4 sm:pt-6">
             <a
-              href="https://github.com/risshabs22-quantified/neolithic-app/releases/download/v1.0.0/Neolithic-1.0.0-Windows-Setup.exe"
+              href="https://github.com/risshabs22-quantified/neolithic-app/releases/latest/download/Neolithic-Setup.exe"
               className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl font-semibold text-base sm:text-lg hover:shadow-2xl hover:shadow-blue-500/30 transition-all glow active:scale-95"
             >
               <Download className="w-5 h-5 flex-shrink-0" />
@@ -206,7 +206,7 @@ export default function Home() {
           <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">Ready to get organized?</h2>
           <p className="text-stone-300 mb-6 sm:mb-8 text-sm sm:text-lg">Download Neolithic and take control of your desktop.</p>
           <a
-            href="https://github.com/risshabs22-quantified/neolithic-app/releases/download/v1.0.0/Neolithic-1.0.0-Windows-Setup.exe"
+            href="https://github.com/risshabs22-quantified/neolithic-app/releases/latest/download/Neolithic-Setup.exe"
             className="inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl font-semibold text-base sm:text-lg hover:shadow-2xl hover:shadow-blue-500/30 transition-all glow active:scale-95"
           >
             <Download className="w-5 h-5 flex-shrink-0" />
@@ -229,7 +229,7 @@ export default function Home() {
               GitHub
             </a>
             <a
-              href="https://github.com/risshabs22-quantified/neolithic-app/releases/download/v1.0.0/Neolithic-1.0.0-Windows-Setup.exe"
+              href="https://github.com/risshabs22-quantified/neolithic-app/releases/latest/download/Neolithic-Setup.exe"
               className="text-stone-400 hover:text-stone-200 transition"
             >
               Download
