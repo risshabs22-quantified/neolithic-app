@@ -4,13 +4,13 @@
   "description": "Task manager, browser tab organizer, and window manager",
   "main": "out/main/index.js",
   "scripts": {
-    "dev": "electron-vite dev",
+    "dev": "prisma generate && electron-vite dev",
     "build": "electron-vite build",
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
     "typecheck": "tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.web.json",
-    "postinstall": "electron-builder install-app-deps",
-    "release:win": "electron-vite build && cross-env CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --win --publish never",
+    "postinstall": "prisma generate && electron-builder install-app-deps",
+    "release:win": "prisma generate && electron-vite build && cross-env CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --win --publish never",
     "dist:win": "npm run release:win"
   },
   "dependencies": {
