@@ -1,6 +1,6 @@
 'use client'
 
-import { CheckCircle, Download, Github, Zap, Lock, Layers, MonitorOff, Clock, Code } from 'lucide-react'
+import { CheckCircle, Download, Github, Zap, Lock, Layers, Monitor, MonitorOff, Clock, Code } from 'lucide-react'
 import { useState } from 'react'
 
 export default function Home() {
