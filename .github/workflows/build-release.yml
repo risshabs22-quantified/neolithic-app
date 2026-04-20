@@ -27,11 +27,15 @@ jobs:
       - name: Build installer
         run: npm run release:win
 
+      - name: List artifacts
+        run: ls -lh release/
+
       - name: Create Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: release/Neolithic-*.exe
           draft: false
           prerelease: false
+          fail_on_unmatched_files: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
