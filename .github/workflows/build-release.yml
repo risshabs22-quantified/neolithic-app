@@ -5,6 +5,9 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: windows-latest
@@ -27,16 +30,7 @@ jobs:
       - name: Build installer
         run: npm run release:win
 
-      - name: List artifacts
-        shell: powershell
-        run: Get-ChildItem -Path release -Filter "*.exe" -File | Format-Table -Property Name, @{Name="Size";Expression={"{0:N0} MB" -f ($_.Length/1MB)}}
-
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
           files: release/Neolithic-*.exe
-          draft: false
-          prerelease: false
-          fail_on_unmatched_files: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
