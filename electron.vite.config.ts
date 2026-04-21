@@ -4,7 +4,7 @@ import { resolve } from 'path'
 
 export default defineConfig({
   main: {
-    plugins: [externalizeDepsPlugin({ exclude: ['better-auth'] })],
+    plugins: [externalizeDepsPlugin()],
     build: {
       rollupOptions: {
         external: ['windows-window-manager'],
