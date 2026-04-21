@@ -41,6 +41,10 @@ export default function Home() {
 
   const faqs = [
     {
+      q: 'Windows says it blocked the app — is it safe?',
+      a: 'Yes. This is Windows SmartScreen flagging a new unsigned app. Neolithic is fully open source — you can read every line of code on GitHub. To install: click "More info" in the SmartScreen dialog, then click "Run anyway". This warning disappears once the app builds reputation from downloads.',
+    },
+    {
       q: 'Is my data safe?',
       a: 'Yes. All data is stored locally in SQLite on your computer. Passwords and encryption keys are encrypted at rest. No cloud sync, no telemetry.',
     },
@@ -120,6 +124,9 @@ export default function Home() {
 
           <p className="text-xs sm:text-sm text-stone-400 pt-2 sm:pt-4">
             Windows 10+ • 108 MB • One-click installer • No admin required
+          </p>
+          <p className="text-xs text-stone-500 pt-1">
+            If Windows SmartScreen appears, click <span className="text-stone-300 font-medium">"More info"</span> then <span className="text-stone-300 font-medium">"Run anyway"</span> — the app is open source and safe.
           </p>
         </div>
       </section>

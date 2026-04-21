@@ -1,5 +1,5 @@
 import { spawnSync } from 'child_process'
-import { join, dirname } from 'path'
+import { join } from 'path'
 import { existsSync } from 'fs'
 import { app } from 'electron'
 
@@ -16,7 +16,7 @@ export function runPrismaMigrateDeploy(): void {
   }
 
   const prismaCli = app.isPackaged
-    ? join(dirname(app.getAppPath()), 'app.asar.unpacked', 'node_modules', 'prisma', 'build', 'index.js')
+    ? join(app.getAppPath(), 'node_modules', 'prisma', 'build', 'index.js')
     : join(process.cwd(), 'node_modules', 'prisma', 'build', 'index.js')
 
   if (!existsSync(prismaCli)) {
