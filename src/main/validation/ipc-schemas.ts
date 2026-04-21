@@ -3,7 +3,7 @@ import { z } from 'zod'
 export function parseIpc<T extends z.ZodTypeAny>(schema: T, data: unknown): z.infer<T> {
   const r = schema.safeParse(data)
   if (!r.success) {
-    const msg = r.error.errors.map((e) => `${e.path.join('.') || 'root'}: ${e.message}`).join('; ')
+    const msg = r.error.issues.map((e) => `${e.path.join('.') || 'root'}: ${e.message}`).join('; ')
     throw new Error(msg || 'Validation failed')
   }
   return r.data

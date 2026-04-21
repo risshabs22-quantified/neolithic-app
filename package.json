@@ -39,7 +39,7 @@
     "react-router-dom": "^6.27.0",
     "sonner": "^1.7.0",
     "tailwind-merge": "^2.5.4",
-    "zod": "^3.23.8",
+    "zod": "^4.3.6",
     "zustand": "^4.5.5"
   },
   "build": {
@@ -89,8 +89,8 @@
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.3",
     "autoprefixer": "^10.4.20",
-    "electron": "^33.2.1",
     "cross-env": "^7.0.3",
+    "electron": "^33.2.1",
     "electron-builder": "^25.1.8",
     "electron-vite": "^2.3.0",
     "postcss": "^8.4.47",
