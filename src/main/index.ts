@@ -80,7 +80,7 @@ app.whenReady().then(async () => {
   })
 
   applyCSP()
-  runPrismaMigrateDeploy()
+  await runPrismaMigrateDeploy()
   registerAllIPC()
   createWindow()
   startBrowserSurfaceMonitor(getMainWindow)

@@ -1,36 +1,55 @@
-import { spawnSync } from 'child_process'
+import { readFileSync, readdirSync, existsSync } from 'fs'
 import { join } from 'path'
-import { existsSync } from 'fs'
 import { app } from 'electron'
+import { getPrisma } from './client'
 
-/**
- * Applies bundled Prisma migrations (SQLite). Must run before first PrismaClient use.
- */
-export function runPrismaMigrateDeploy(): void {
-  const schemaPath = app.isPackaged
-    ? join(process.resourcesPath, 'prisma', 'schema.prisma')
-    : join(process.cwd(), 'prisma', 'schema.prisma')
+export async function runPrismaMigrateDeploy(): Promise<void> {
+  const prisma = getPrisma()
 
-  if (!existsSync(schemaPath)) {
-    throw new Error(`Prisma schema missing: ${schemaPath}`)
-  }
+  const migrationsDir = app.isPackaged
+    ? join(process.resourcesPath, 'prisma', 'migrations')
+    : join(process.cwd(), 'prisma', 'migrations')
 
-  const prismaCli = app.isPackaged
-    ? join(app.getAppPath(), 'node_modules', 'prisma', 'build', 'index.js')
-    : join(process.cwd(), 'node_modules', 'prisma', 'build', 'index.js')
+  if (!existsSync(migrationsDir)) return
 
-  if (!existsSync(prismaCli)) {
-    throw new Error(`Prisma CLI missing: ${prismaCli}`)
-  }
+  // Ensure migration tracking table exists
+  await prisma.$executeRawUnsafe(`
+    CREATE TABLE IF NOT EXISTS "_prisma_migrations" (
+      id TEXT NOT NULL PRIMARY KEY,
+      migration_name TEXT NOT NULL,
+      finished_at TEXT
+    )
+  `)
 
-  const result = spawnSync(process.execPath, [prismaCli, 'migrate', 'deploy', '--schema', schemaPath], {
-    encoding: 'utf-8',
-    env: { ...process.env },
-    stdio: ['ignore', 'pipe', 'pipe'],
-  })
+  const folders = readdirSync(migrationsDir)
+    .filter((d) => !d.endsWith('.toml'))
+    .sort()
 
-  if (result.status !== 0) {
-    const err = (result.stderr || result.stdout || '').trim()
-    throw new Error(`Prisma migrate deploy failed: ${err}`)
+  for (const folder of folders) {
+    const sqlFile = join(migrationsDir, folder, 'migration.sql')
+    if (!existsSync(sqlFile)) continue
+
+    // Skip already-applied migrations
+    const rows = await prisma.$queryRawUnsafe<{ id: string }[]>(
+      `SELECT id FROM "_prisma_migrations" WHERE migration_name = ? AND finished_at IS NOT NULL`,
+      folder
+    )
+    if (rows.length > 0) continue
+
+    const sql = readFileSync(sqlFile, 'utf-8')
+    const statements = sql
+      .split(';')
+      .map((s) => s.trim())
+      .filter(Boolean)
+
+    for (const stmt of statements) {
+      await prisma.$executeRawUnsafe(stmt)
+    }
+
+    await prisma.$executeRawUnsafe(
+      `INSERT OR REPLACE INTO "_prisma_migrations" (id, migration_name, finished_at) VALUES (?, ?, datetime('now'))`,
+      folder,
+      folder
+    )
   }
 }

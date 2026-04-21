@@ -18,7 +18,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: 'npm'
 
       - name: Install dependencies
@@ -33,4 +33,6 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          files: release/Neolithic-*.exe
+          files: release/Neolithic-Setup.exe
+          generate_notes: true
+          fail_on_unmatched_files: true
