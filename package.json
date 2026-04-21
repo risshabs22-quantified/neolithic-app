@@ -45,17 +45,11 @@
   "build": {
     "appId": "com.neolithic.app",
     "productName": "Neolithic",
-    "asar": true,
-    "asarUnpack": [
-      "**/prisma/**",
-      "**/.prisma/**",
-      "**/@prisma/**",
-      "**/query_engine*",
-      "**/libquery_engine*"
-    ],
+    "asar": false,
     "directories": {
       "output": "release"
     },
+    "afterPack": "./scripts/after-pack.js",
     "files": [
       "out/**/*",
       "package.json",
@@ -70,14 +64,6 @@
           "!dev.db",
           "!dev.db-journal"
         ]
-      },
-      {
-        "from": "node_modules/.prisma",
-        "to": "node_modules/.prisma"
-      },
-      {
-        "from": "node_modules/@prisma/client",
-        "to": "node_modules/@prisma/client"
       }
     ],
     "win": {
