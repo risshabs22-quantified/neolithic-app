@@ -4,7 +4,6 @@
 import { config } from 'dotenv'
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs'
 import { join } from 'path'
-import { pathToFileURL } from 'url'
 import { randomBytes } from 'crypto'
 import { app } from 'electron'
 
@@ -58,8 +57,8 @@ function ensureDatabaseUrl(): void {
   const userData = app.getPath('userData')
   if (!existsSync(userData)) mkdirSync(userData, { recursive: true })
 
-  const dbPath = join(userData, 'neolithic.db')
-  process.env.DATABASE_URL = pathToFileURL(dbPath).href
+  const dbPath = join(userData, 'neolithic.db').split('\\').join('/')
+  process.env.DATABASE_URL = 'file:' + dbPath
 }
 
 ensureMachineSecrets()

@@ -23,6 +23,7 @@ function getAuth(): AuthApp {
       emailAndPassword: { enabled: true },
       secret: process.env.BETTER_AUTH_SECRET,
       baseURL: 'http://localhost',
+      trustedOrigins: ['http://localhost'],
     }) as AuthApp
   }
   return authInstance
@@ -39,7 +40,7 @@ export async function signUp(email: string, password: string): Promise<AuthResul
     const auth = getAuth()
     const req = new Request('http://localhost/api/auth/sign-up/email', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', Origin: 'http://localhost' },
       body: JSON.stringify({ email, password, name: email }),
     })
     const res = await auth.handler(req)
@@ -71,7 +72,7 @@ export async function signIn(email: string, password: string): Promise<AuthResul
     const auth = getAuth()
     const req = new Request('http://localhost/api/auth/sign-in/email', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', Origin: 'http://localhost' },
       body: JSON.stringify({ email, password }),
     })
     const res = await auth.handler(req)
@@ -105,7 +106,7 @@ export async function signOut(): Promise<void> {
       const auth = getAuth()
       const req = new Request('http://localhost/api/auth/sign-out', {
         method: 'POST',
-        headers: { Cookie: `better-auth.session_token=${token}` },
+        headers: { Cookie: `better-auth.session_token=${token}`, Origin: 'http://localhost' },
       })
       await auth.handler(req)
     }
@@ -121,7 +122,7 @@ export async function getSession(): Promise<SessionResult | null> {
     if (!token) return null
     const auth = getAuth()
     const req = new Request('http://localhost/api/auth/get-session', {
-      headers: { Cookie: `better-auth.session_token=${token}` },
+      headers: { Cookie: `better-auth.session_token=${token}`, Origin: 'http://localhost' },
     })
     const res = await auth.handler(req)
     if (!res.ok) {
