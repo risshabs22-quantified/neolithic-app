@@ -3,9 +3,8 @@
 import { useRef } from 'react'
 import { motion, useInView, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { useState } from 'react'
-import { Download, Github, CheckSquare, Bookmark, Globe, Monitor, Lock, Code, ArrowRight } from 'lucide-react'
+import { Download, CheckSquare, Bookmark, Globe, Monitor, Lock, Code, ArrowRight } from 'lucide-react'
 
-const GITHUB   = 'https://github.com/risshabs22-quantified/neolithic-app'
 const DOWNLOAD = 'https://github.com/risshabs22-quantified/neolithic-app/releases/latest/download/Neolithic-Setup.exe'
 
 type BezierEase = [number, number, number, number]
@@ -159,7 +158,7 @@ const features = [
   { Icon: Globe,       title: 'Browser Monitor',    desc: "See which browser windows are open and in focus. Get notified when a window title hasn't changed in days.",   color: 'text-sky-400',    iconBg: 'rgba(56,189,248,0.12)', glow: 'rgba(56,189,248,0.1)' },
   { Icon: Monitor,     title: 'Window Organizer',   desc: 'Snap windows left or right, maximize them, or auto-grid everything on screen in one click.',                 color: 'text-emerald-400',iconBg: 'rgba(52,211,153,0.12)', glow: 'rgba(52,211,153,0.1)' },
   { Icon: Lock,        title: 'All local. Encrypted.', desc: 'SQLite on your own disk. Encryption keys generated once per machine — they never leave your computer.',   color: 'text-amber-400',  iconBg: 'rgba(251,191,36,0.12)', glow: 'rgba(251,191,36,0.1)' },
-  { Icon: Code,        title: 'Open source',        desc: 'MIT license. Every line is on GitHub. No hidden network calls, no tracking, nothing undisclosed.',           color: 'text-zinc-400',   iconBg: 'rgba(161,161,170,0.08)',glow: 'rgba(161,161,170,0.06)' },
+  { Icon: Code,        title: 'Open source',        desc: 'MIT license. No hidden network calls, no tracking, nothing undisclosed.',                                   color: 'text-zinc-400',   iconBg: 'rgba(161,161,170,0.08)',glow: 'rgba(161,161,170,0.06)' },
 ]
 
 const faqs = [
@@ -249,11 +248,6 @@ export default function Home() {
             <span className="font-bold text-sm tracking-tight">Neolithic</span>
             <span className="hidden sm:inline text-[10px] text-indigo-400 font-mono border border-indigo-500/20 bg-indigo-500/[0.07] px-1.5 py-0.5 rounded-md">v1.0.6</span>
           </div>
-          <div className="w-px h-4 bg-white/[0.07]" />
-          <a href={GITHUB} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 text-zinc-400 hover:text-white transition-colors duration-200" aria-label="View source on GitHub">
-            <Github className="w-4 h-4" />
-            <span className="text-xs hidden sm:inline">GitHub</span>
-          </a>
         </nav>
       </motion.header>
 
@@ -323,19 +317,6 @@ export default function Home() {
               >
                 <Download className="w-4 h-4 group-hover:translate-y-0.5 transition-transform duration-200" />
                 Download for Windows
-              </motion.a>
-              <motion.a
-                href={GITHUB}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3.5 glass rounded-xl font-bold text-sm"
-                style={{ minHeight: 48 }}
-                whileHover={{ backgroundColor: 'rgba(255,255,255,0.06)', scale: 1.02 }}
-                whileTap={{ scale: 0.97 }}
-                transition={{ duration: 0.15 }}
-              >
-                <Github className="w-4 h-4" />
-                View source
               </motion.a>
             </motion.div>
 
@@ -574,19 +555,6 @@ export default function Home() {
               <Download className="w-5 h-5 group-hover:translate-y-0.5 transition-transform duration-200" />
               Download v1.0.6 — Free
             </motion.a>
-            <motion.a
-              href={GITHUB}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2.5 px-8 py-4 glass rounded-xl font-bold text-base"
-              style={{ minHeight: 56 }}
-              whileHover={{ scale: 1.03, backgroundColor: 'rgba(255,255,255,0.07)' }}
-              whileTap={{ scale: 0.97 }}
-              transition={{ duration: 0.15 }}
-            >
-              <Github className="w-5 h-5" />
-              View on GitHub
-            </motion.a>
           </div>
           <p className="mt-7 text-xs text-zinc-700">108 MB · Windows 10 or later · No admin rights required</p>
         </ScrollReveal>
@@ -601,11 +569,6 @@ export default function Home() {
               <span className="font-bold text-sm">Neolithic</span>
             </div>
             <p className="text-[11px] text-zinc-700 leading-relaxed">MIT License · Open source · Windows 10 or later<br />&copy; 2026 Neolithic</p>
-          </div>
-          <div className="flex items-center gap-6">
-            {[['Source', GITHUB], ['Releases', `${GITHUB}/releases`], ['Docs', `${GITHUB}#readme`]].map(([label, href]) => (
-              <a key={label} href={href} target="_blank" rel="noopener noreferrer" className="text-xs text-zinc-600 hover:text-zinc-300 transition-colors duration-150">{label}</a>
-            ))}
           </div>
         </div>
       </footer>
